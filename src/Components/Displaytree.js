@@ -6,16 +6,26 @@ class Displaytree extends Component {
     }
     render(){
 
-        let treeArray  = this.props.Nodearray;
+        let treeArray  = this.props.Nodearray.treeArray;
+        let commArray = this.props.Nodearray.commArray;
 
         return(
             <div>
-                {
-
-                    treeArray.map((node) => {
-                        return <div> {node} </div>
-                    })
-                }
+                <div>
+                    {
+                        treeArray.map((node) => {
+                            return <div> {node} </div>
+                        })
+                    }
+                </div>
+                <hr/>
+                <div>
+                    {
+                        commArray.map((comm) =>{
+                            return<div>{comm}</div>
+                        })
+                    }
+                </div>
             </div>
         )
     }

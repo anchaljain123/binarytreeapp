@@ -1,6 +1,9 @@
 import React,{ Component } from 'react';
 import Form from './Form'
 import Displaytree from './Displaytree'
+import Showcomm from './Showcommission'
+import SubTree from './subTree'
+
 class App extends Component{
 
     constructor(){
@@ -10,8 +13,39 @@ class App extends Component{
             commArray:[],
             TreeStage: 0,
             display:false,
-            insert:false,
+            getamt:false,
+            commIndex:0,
+            subTree:[],
+            index:0,
+            issubtree:false,
         }
+    }
+    subtree = (treeIndex) =>{
+        let { subTree } = this.state,
+            {index} = this.state;
+        var nodeval = this.state.treeArray[treeIndex];
+        subTree[index] = nodeval;
+        index++;
+        this.setState({index:index});
+        let left = (2 * index) + 1;
+        let right = (2 * index) + 2;
+        if(left!=undefined){
+            subTree[index] = nodeval;
+            index++;
+            this.setState({index:index},()=>{
+                this.subtree(left)
+            });
+
+        }
+        if(right!=undefined){
+            subTree[index] = nodeval;
+            index++;
+            this.setState({index:index},()=>{
+                this.subtree(right);
+            });
+
+        }
+        this.setState({subTree:subTree,})
     }
 
     iscompleteTree = (n)  =>{
@@ -30,6 +64,7 @@ class App extends Component{
 
     updateCommision = (i) =>{
         let {commArray}  = this.state;
+        console.log(commArray,"---updatecomm")
 
         if (this.iscompleteTree(i)) {
             var nodeIndex = i;
@@ -59,14 +94,11 @@ class App extends Component{
 
     insertNode = (nodeValues)  => {
 
-
         let i = this.state.TreeStage,
             { treeArray } = this.state,
             { commArray } = this.state,
             value = nodeValues.nodeValue,
             commValue = nodeValues.commValue;
-
-
         if (treeArray[i] != null)
         {
             let l = (2 * i) + 1;
@@ -76,7 +108,6 @@ class App extends Component{
                 if (treeArray[r] != null) {
                     i++;
                     this.setState({TreeStage:i},()=>{
-
                         this.insertNode(nodeValues);
                     });
 
@@ -89,17 +120,14 @@ class App extends Component{
                 }
             }
             else {
-
                 treeArray[l] = nodeValues.nodeValue;
-                commArray[l] = nodeValues.commValue;;
+                commArray[l] = nodeValues.commValue;
                 this.setState({treeArray:treeArray , commArray : commArray});
             }
         }
         else {
-
             treeArray[i] = nodeValues.nodeValue;
             commArray[i] = nodeValues.commValue;
-
             this.setState({treeArray:treeArray,commArray:commArray });
 
         }
@@ -107,24 +135,45 @@ class App extends Component{
 
     getAmount = (index) =>{
 
-        let { commArray } = this.state;
-            console.log(commArray[index],"********commArray")
-
+        this.setState({
+            getamt:true,
+            commIndex:index
+        })
     }
 
+    changeGetAmt =() =>{
+        this.setState({getamt:false,})
+    }
 
+    updateState =()=>{
+        this.setState({issubtree:false})
+    }
 
     render(){
         return(
             <div>
-                <button onClick={(e)=>this.setState({display:true, insert:false,})}>display</button>
-                <button onClick={(e)=>this.setState({insert:true, display:false})}>ADD</button>
-
+                <button onClick={(e)=>this.setState({display:true, })}>display</button>
+                <button onClick={(e)=>this.setState({display:false})}>ADD</button>
                 {
                     this.state.display?
-                        <Displaytree Nodearray={this.state.treeArray}/>
+                        <Displaytree Nodearray={this.state} />
                         :
                         <Form insertNode={this.insertNode} getAmount ={this.getAmount} />
+                }
+                {
+                    this.state.getamt?
+                        <Showcomm  commarray={this.state.commArray}
+                                   commIndex={this.state.commIndex}
+                                   changeGetAmt={this.changeGetAmt}
+                        />
+                        :""
+                }
+
+                <button onClick={() =>{this.setState({issubtree:true})}}>getSubtree</button>
+                {
+                    this.state.issubtree?
+                        <SubTree calculateSubTree={this.subtree} changesubtree={this.updateState}/>
+                        :""
                 }
 
             </div>

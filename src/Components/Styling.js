@@ -41,6 +41,14 @@ export default {
     },
     displaytree:{
         text:'black'
+    },
+    treeform:{
+        marginTop:'120px',
+        marginLeft:'160px',
+        marginBottom:'12px',
+        border:'3px solid gray',
+        width:'240px',
+        padding:'35px'
     }
 
 }

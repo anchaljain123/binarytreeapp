@@ -1,9 +1,10 @@
 import React , {Component} from 'react'
+import Styling from './Styling'
 class Form extends Component{
     constructor(){
         super();
         this.state = {
-            nodeValue : 0,
+            nodeValue :0,
             commValue :0,
             index:0,
         }
@@ -20,26 +21,27 @@ class Form extends Component{
 
     getAmountNode = () =>{
 
-        this.props.getAmount(this.state.index)
+        this.props.getAmount(this.state.index);
     }
 
     render(){
         return(
 
-            <div >
-
-                    <div>
+            <div style={Styling.treeform}>
+                <div>
                         <label>Enter Node Value:</label>
                         <input
                             type="text" name="name"
+                            style={{marginBottom:'20px'}}
                             value={this.state.nodeValue}
                             onChange={(event) =>this.setState({ nodeValue: event.target.value })}
                         />
                     </div>
-                    <button onClick={ this.insertNode }>INSERT</button>
+                    <button onClick={ this.insertNode } style={{marginBottom:'20px'}}>INSERT</button>
                     <div className="form-group">
-                        <label>Enter Index:</label>
+                        <label >Enter Index:</label>
                         <input type="text" value={this.state.index}
+                               style={{marginBottom:'20px'}}
                                onChange={(event)=> this.setState({ index: event.target.value })}
                         />
                     </div>
